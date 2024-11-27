@@ -1,34 +1,44 @@
 package modelo;
 
 public class Casilla {
-    private boolean mina;
+    private boolean tieneMina;
     private boolean descubierta;
+    private boolean marcada;
     private int numero;
 
     public Casilla() {
-        this.mina = false;
+        this.tieneMina = false;
         this.descubierta = false;
+        this.marcada = false;
         this.numero = 0;
     }
 
-    public boolean tieneMina() {
-        return mina;
-    }
-
     public void colocarMina() {
-        this.mina = true;
-    }
-
-    public boolean estaDescubierta() {
-        return descubierta;
+        this.tieneMina = true;
     }
 
     public void descubrir() {
         this.descubierta = true;
     }
 
+    public void marcar() {
+        this.marcada = true;
+    }
+
+    public boolean tieneMina() {
+        return this.tieneMina;
+    }
+
+    public boolean estaDescubierta() {
+        return this.descubierta;
+    }
+
+    public boolean estaMarcada() {
+        return this.marcada;
+    }
+
     public int getNumero() {
-        return numero;
+        return this.numero;
     }
 
     public void setNumero(int numero) {
@@ -36,9 +46,12 @@ public class Casilla {
     }
 
     public String mostrar() {
-        if (!descubierta) {
-            return "-";
+        if (this.marcada) {
+            return "M";
+        } else if (this.descubierta) {
+            return this.tieneMina() ? "X" : String.valueOf(this.numero);
+        } else {
+            return "#";  // Casilla no descubierta
         }
-        return mina ? "X" : (numero == 0 ? "V" : String.valueOf(numero));
     }
 }
