@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.Scanner;
 import excepciones.CasillaYaDescubiertaException;
 
 public class Tablero {
@@ -74,6 +75,7 @@ public class Tablero {
                 descubrir(fila + dFila[d], columna + dColumna[d]);
             }
         }
+        
     }
 
     public void mostrarTablero() {
@@ -87,6 +89,12 @@ public class Tablero {
             System.out.println();
             letraFila++;
         }
+    }
+    public Casilla getCasilla(int fila, int columna) {
+        if (esValido(fila, columna)) {
+            return casillas[fila][columna];
+        }
+        return null;  // O lanzar una excepción si prefieres
     }
 
     private void mostrarTableroCompleto() {
@@ -105,4 +113,51 @@ public class Tablero {
             letraFila++;
         }
     }
+
+    // Método para iniciar el juego
+    public static void iniciarJuego() {
+        try (Scanner scanner = new Scanner(System.in)) {
+			Tablero tablero = new Tablero();
+
+			while (true) {
+			    tablero.mostrarTablero();
+			    System.out.println("Introduce la fila (letra) y columna (número) para descubrir (ejemplo: A1):");
+
+			    String entrada = scanner.nextLine().toUpperCase(); // Tomamos la entrada y la convertimos a mayúsculas
+
+			    // Verificamos que la entrada sea válida (debe ser una letra y un número)
+			    if (entrada.length() == 2) {
+			        char letra = entrada.charAt(0);
+			        int columna;
+
+			        try {
+			            columna = Integer.parseInt(entrada.substring(1)); // Intentamos obtener la columna
+			        } catch (NumberFormatException e) {
+			            System.out.println("Formato inválido. Usa letra y número (ejemplo: A1).");
+			            continue;
+			        }
+
+			        // Validamos que la letra esté entre 'A' y 'J' y la columna entre 1 y 10
+			        if (letra >= 'A' && letra <= 'J' && columna >= 1 && columna <= 10) {
+			            int fila = letra - 'A';  // Convertimos la letra en un índice (A = 0, B = 1, ...)
+			            
+			            try {
+			                // Llamada al método descubrir, ahora manejamos la excepción CasillaYaDescubiertaException
+			                tablero.descubrir(fila, columna - 1);  // Restamos 1 porque las columnas son 0-based
+			            } catch (CasillaYaDescubiertaException e) {
+			                // Si la casilla ya ha sido descubierta, mostramos un mensaje
+			                System.out.println(e.getMessage());
+			            }
+			        } else {
+			            System.out.println("Entrada fuera de rango. Usa una fila de la A a la J y columna de 1 a 10.");
+			        }
+			    } else {
+			        System.out.println("Formato inválido. Usa letra y número (ejemplo: A1).");
+			    }
+			}
+		}
+    }
+    
 }
+
+

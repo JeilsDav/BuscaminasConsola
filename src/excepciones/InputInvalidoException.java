@@ -1,7 +1,9 @@
 package excepciones;
 
 public class InputInvalidoException extends Exception {
-    public InputInvalidoException(String mensaje) {
+    private static final long serialVersionUID = 1L;
+
+	public InputInvalidoException(String mensaje) {
         super(mensaje);
     }
 }
